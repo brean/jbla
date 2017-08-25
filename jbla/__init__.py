@@ -4,7 +4,7 @@ import json
 providing helper methods to easily create new animations
 '''
 class BlenderAnimationBuilder(dict):
-    def add_to_tween(self, name, duration=100,
+    def add_to_tween(self, name, duration=100,relative=None,
                      x=None, y=None, z=None, alpha=None):
         props = {}
         if x != None:
@@ -15,6 +15,8 @@ class BlenderAnimationBuilder(dict):
             props['z'] = z
         if alpha != None:
             props['alpha'] = alpha
+        if relative != None:
+            props['relative'] = relative
         data = {
             'type': 'to',
             'duration': duration,
@@ -40,9 +42,15 @@ class BlenderAnimation(object):
     posibion object in blender based on animation props
     '''
     def position_object(self, obj, props):
-        x = props['x'] if 'x' in props else obj.location[0]
-        y = props['y'] if 'y' in props else obj.location[1]
-        z = props['z'] if 'z' in props else obj.location[2]
+        rel = 'relative' in props and props['relative']
+        # if value not set do not change object location, so start
+        # with last location
+        x,y,z = obj.location
+
+        x = props['x'] + x*rel if 'x' in props else x
+        y = props['y'] + y*rel if 'y' in props else y
+        z = props['z'] + z*rel if 'z' in props else z
+
         obj.location = (x, y, z)
 
     def animate_to(self, tween, frames, animate_objects):
