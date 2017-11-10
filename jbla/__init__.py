@@ -39,7 +39,7 @@ class BlenderAnimation(object):
         self.data = json.load(json_file)
 
     '''
-    posibion object in blender based on animation props
+    position object in blender based on animation properties
     '''
     def position_object(self, obj, props):
         rel = 'relative' in props and props['relative']
