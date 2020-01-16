@@ -77,6 +77,7 @@ class BlenderAnimation(object):
         frame_end = 0
         for name, data in self.data.items():
             animate_objects = None
+            print(bpy.data)
             grp = bpy.data.groups.get(name)
             if grp:
                 animate_objects = grp.objects
